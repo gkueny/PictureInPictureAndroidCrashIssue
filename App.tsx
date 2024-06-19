@@ -1,118 +1,70 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, {useState} from 'react';
+import Animated, {FadeIn} from 'react-native-reanimated';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import Video from 'react-native-video';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
+  Dimensions,
   StyleSheet,
   Text,
-  useColorScheme,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    position: 'absolute',
+    top: 50,
+    width: '100%',
+    height: (Dimensions.get('window').width * 9) / 16,
+    zIndex: 100,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  halfScreen: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'black',
   },
 });
 
+const VideoComponent = ({show}: {show: boolean}) => {
+  if (!show) {
+    return null;
+  }
+
+  const source = {uri: 'https://test-streams.mux.dev/pts_shift/master.m3u8'};
+
+  return (
+    <View style={styles.container}>
+      <Video
+        source={source}
+        style={styles.halfScreen}
+        enterPictureInPictureOnLeave={true}
+      />
+      <Animated.View entering={FadeIn.duration(500)}>
+        <Text>X</Text>
+      </Animated.View>
+    </View>
+  );
+};
+
+const VideoPlayer = () => {
+  const [show, setShow] = useState(true);
+
+  return (
+    <View>
+      <TouchableOpacity
+        style={{padding: 10}}
+        onPress={() => setShow(old => !old)}>
+        <Text>{show ? 'hide' : 'show'}</Text>
+      </TouchableOpacity>
+      <VideoComponent show={show} />
+    </View>
+  );
+};
+
+const App = () => {
+  return <VideoPlayer />;
+};
 export default App;

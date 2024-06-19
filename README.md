@@ -1,79 +1,51 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Crash reproduction with android PiP
 
-# Getting Started
+## Reproduction steps
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+Open app
 
-## Step 1: Start the Metro Server
+- See the video playing normally
+- Go background
+  - Assert PiP Android work normally
+- Go foreground
+- Go background
+  - Assert PiP Android work normally
+- Go foreground
+- Hide Video
+- Show video
+- Go background
+  - Assert App crash
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## Stacktrace:
 
-To start Metro, run the following command from the _root_ of your React Native project:
-
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
 ```
-
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+E AndroidRuntime: FATAL EXCEPTION: main
+E AndroidRuntime: Process: com.pictureinpictureandroidcrashissue, PID: 28046
+E AndroidRuntime: java.lang.NullPointerException: Attempt to invoke virtual method 'void android.view.ViewGroup.removeView(android.view.View)' on a null object reference
+E AndroidRuntime:        at com.brentvatne.exoplayer.ReactExoplayerView.setIsInPictureInPicture(ReactExoplayerView.java:2143)
+E AndroidRuntime:        at com.brentvatne.exoplayer.ReactExoplayerFragment.onPictureInPictureModeChanged(ReactExoplayerFragment.kt:35)
+E AndroidRuntime:        at androidx.fragment.app.Fragment.performPictureInPictureModeChanged(Fragment.java:3072)
+E AndroidRuntime:        at androidx.fragment.app.FragmentManager.dispatchPictureInPictureModeChanged(FragmentManager.java:3152)
+E AndroidRuntime:        at androidx.fragment.app.FragmentController.dispatchPictureInPictureModeChanged(FragmentController.java:356)
+E AndroidRuntime:        at androidx.fragment.app.FragmentActivity.onPictureInPictureModeChanged(FragmentActivity.java:251)
+E AndroidRuntime:        at android.app.Activity.onPictureInPictureModeChanged(Activity.java:2979)
+E AndroidRuntime:        at androidx.activity.ComponentActivity.onPictureInPictureModeChanged(ComponentActivity.java:1064)
+E AndroidRuntime:        at android.app.Activity.dispatchPictureInPictureModeChanged(Activity.java:9320)
+E AndroidRuntime:        at android.app.ActivityThread.handleWindowingModeChangeIfNeeded(ActivityThread.java:6799)
+E AndroidRuntime:        at android.app.ActivityThread.performActivityConfigurationChanged(ActivityThread.java:6599)
+E AndroidRuntime:        at android.app.ActivityThread.performConfigurationChangedForActivity(ActivityThread.java:6574)
+E AndroidRuntime:        at android.app.ActivityThread.handleActivityConfigurationChanged(ActivityThread.java:6966)
+E AndroidRuntime:        at android.app.ActivityThread$ActivityClientRecord$1.onConfigurationChanged(ActivityThread.java:764)
+E AndroidRuntime:        at android.view.ViewRootImpl.performConfigurationChange(ViewRootImpl.java:6938)
+E AndroidRuntime:        at android.view.ViewRootImpl.handleResized(ViewRootImpl.java:2500)
+E AndroidRuntime:        at android.view.ViewRootImpl.-$$Nest$mhandleResized(Unknown Source:0)
+E AndroidRuntime:        at android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl(ViewRootImpl.java:7197)
+E AndroidRuntime:        at android.view.ViewRootImpl$ViewRootHandler.handleMessage(ViewRootImpl.java:7166)
+E AndroidRuntime:        at android.os.Handler.dispatchMessage(Handler.java:106)
+E AndroidRuntime:        at android.os.Looper.loopOnce(Looper.java:230)
+E AndroidRuntime:        at android.os.Looper.loop(Looper.java:319)
+E AndroidRuntime:        at android.app.ActivityThread.main(ActivityThread.java:8919)
+E AndroidRuntime:        at java.lang.reflect.Method.invoke(Native Method)
+E AndroidRuntime:        at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:578)
+E AndroidRuntime:        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1103)
 ```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
